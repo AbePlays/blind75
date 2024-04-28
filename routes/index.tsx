@@ -1,4 +1,6 @@
-import { array, boolean, object, parse, picklist, string } from 'valibot'
+import { Handlers, PageProps } from '$fresh/server.ts'
+import { array, boolean, type Input, object, parse, picklist, string } from 'valibot'
+
 import Badge from '../components/badge.tsx'
 
 const ProblemSchema = object({
@@ -13,21 +15,80 @@ const ProblemSchema = object({
 	})),
 })
 
-export default async function Home() {
-	const response = await fetch('https://nfjx7ug3qec76hujjep5wyjeya0bvovn.lambda-url.ap-south-1.on.aws/')
-	const data = await response.json()
+type Data = Input<typeof ProblemSchema> & { groups: string[] }
 
-	const parsedData = parse(ProblemSchema, data)
+export const handler: Handlers<Data> = {
+	async GET(req, ctx) {
+		const { searchParams } = new URL(req.url)
+		const selectedGroup = searchParams.getAll('group')
+
+		const response = await fetch('https://nfjx7ug3qec76hujjep5wyjeya0bvovn.lambda-url.ap-south-1.on.aws/')
+		const data = await response.json()
+		const parsedData = parse(ProblemSchema, data)
+
+		const groups = parsedData.result.reduce((acc: string[], item) => {
+			if (!acc.includes(item.group)) acc.push(item.group)
+			return acc
+		}, [])
+
+		if (selectedGroup.length > 0) {
+			parsedData.result = parsedData.result.filter((item) => selectedGroup.includes(item.group))
+		}
+
+		return ctx.render({ ...parsedData, groups }, {
+			headers: {
+				'cache-control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=3600',
+			},
+		})
+	},
+}
+
+export default function Home(props: PageProps<Data>) {
+	const { data, url } = props
+	const selectedGroups = url.searchParams.getAll('group')
 
 	return (
-		<main class='px-4 my-16 max-w-screen-md mx-auto'>
+		<main class='px-4 py-16 max-w-screen-md mx-auto'>
 			<h1 class='text-4xl font-bold text-center text-balance'>The Blind 75 Coding Interview Questions</h1>
 			<p class='text-stone-500 text-center mt-2 text-lg'>
 				A comprehensive list of the most common coding interview questions.
 			</p>
 
+			<form class='mt-4'>
+				<span class='font-semibold'>Filter by group:</span>
+				<fieldset class='flex flex-wrap gap-2 mt-2'>
+					{data.groups.map((group) => (
+						<>
+							<label
+								for={group}
+								class='flex shrink-0 cursor-pointer items-start gap-2 border border-stone-200 shadow-sm hover:shadow transition-shadow rounded-xl px-3 py-1.5 text-sm'
+							>
+								<div class='flex items-center'>
+									&#8203;
+									<input
+										class='size-4 rounded-full border-stone-300 text-blue-500'
+										defaultChecked={selectedGroups.includes(group)}
+										id={group}
+										name='group'
+										type='checkbox'
+										value={group}
+									/>
+								</div>
+
+								<span class='font-medium'>{group}</span>
+							</label>
+						</>
+					))}
+				</fieldset>
+
+				<div class='mt-4 flex gap-4 font-medium'>
+					<a class='px-4 py-1 border border-stone-200 shadow-sm rounded' href='/'>Clear</a>
+					<button class='px-4 py-1 bg-blue-500 text-white shadow-sm rounded' type='submit'>Apply</button>
+				</div>
+			</form>
+
 			<ul aria-label='List of problems' class='space-y-4 mt-8'>
-				{parsedData.result.map((problem, index) => (
+				{data.result.map((problem, index) => (
 					<li class='rounded-lg flex justify-between font-medium gap-4 shadow-sm hover:shadow transition-shadow duration-300 bg-stone-50 p-4'>
 						<a href={problem.problem_link} target='_blank' rel='noreferrer'>
 							{index + 1}. {problem.name}
