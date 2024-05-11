@@ -50,7 +50,7 @@ export default function Home(props: PageProps<Data>) {
 	return (
 		<main class='px-4 py-16 max-w-screen-md mx-auto'>
 			<h1 class='text-4xl font-bold text-center text-balance'>The Blind 75 Coding Interview Questions</h1>
-			<p class='text-stone-500 text-center mt-2 text-lg'>
+			<p class='text-center opacity-65 mt-2 text-lg'>
 				A comprehensive list of the most common coding interview questions.
 			</p>
 
@@ -61,7 +61,7 @@ export default function Home(props: PageProps<Data>) {
 						<>
 							<label
 								for={group}
-								class='flex shrink-0 cursor-pointer items-start gap-2 border border-stone-200 shadow-sm hover:shadow transition-shadow rounded-xl px-3 py-1.5 text-sm'
+								class='flex shrink-0 cursor-pointer items-start gap-2 border border-stone-200 dark:border-stone-700 shadow-sm hover:shadow transition-shadow rounded-xl px-3 py-1.5 text-sm'
 							>
 								<div class='flex items-center'>
 									&#8203;
@@ -82,14 +82,14 @@ export default function Home(props: PageProps<Data>) {
 				</fieldset>
 
 				<div class='mt-4 flex gap-4 font-medium'>
-					<a class='px-4 py-1 border border-stone-200 shadow-sm rounded' href='/'>Clear</a>
+					<a class='px-4 py-1 border border-stone-200 dark:border-stone-700 shadow-sm rounded' href='/'>Clear</a>
 					<button class='px-4 py-1 bg-blue-500 text-white shadow-sm rounded' type='submit'>Apply</button>
 				</div>
 			</form>
 
 			<ul aria-label='List of problems' class='space-y-4 mt-8'>
 				{data.result.map((problem, index) => (
-					<li class='rounded-lg flex justify-between font-medium gap-4 shadow-sm hover:shadow transition-shadow duration-300 bg-stone-50 p-4'>
+					<li class='rounded-lg flex justify-between font-medium gap-4 shadow-sm bg-stone-50 dark:bg-stone-800 p-4'>
 						<a href={problem.problem_link} target='_blank' rel='noreferrer'>
 							{index + 1}. {problem.name}
 						</a>
@@ -104,7 +104,7 @@ export default function Home(props: PageProps<Data>) {
 								rel='noreferrer'
 							>
 								<svg
-									class='size-7'
+									class='size-7 dark:invert'
 									xmlns='http://www.w3.org/2000/svg'
 									width='100'
 									height='100'

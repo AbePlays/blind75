@@ -6,9 +6,11 @@ export type BadgeProps = {
 
 function getVariant(variant: BadgeProps['variant']) {
 	const variantClasses = {
-		easy: 'bg-green-100 text-green-800 border border-green-300',
-		medium: 'bg-yellow-100 text-yellow-800 border border-yellow-300',
-		hard: 'bg-red-100 text-red-800 border border-red-300',
+		easy:
+			'bg-green-100 text-green-800 border border-green-300 dark:border-green-800 dark:bg-green-700 dark:text-green-200',
+		medium:
+			'bg-yellow-100 text-yellow-800 border border-yellow-300 dark:border-yellow-800 dark:bg-yellow-700 dark:text-yellow-200',
+		hard: 'bg-red-100 text-red-800 border border-red-300 dark:border-red-800 dark:bg-red-700 dark:text-red-200',
 	}
 
 	return variantClasses[variant]
