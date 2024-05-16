@@ -36,9 +36,12 @@
 		"**/_fresh/*"
 	],
 	"imports": {
+		"@shikijs/markdown-it": "https://esm.sh/@shikijs/markdown-it@1.5.2",
 		"@tailwindcss/forms": "https://esm.sh/@tailwindcss/forms@0.5.7",
+		"@tailwindcss/typography": "https://esm.sh/@tailwindcss/typography@0.5.13",
 		"$fresh/": "https://deno.land/x/fresh@1.6.8/",
 		"$std/": "https://deno.land/std@0.216.0/",
+		"markdown-it": "https://esm.sh/markdown-it@14.1.0",
 		"preact": "https://esm.sh/preact@10.19.6",
 		"preact/": "https://esm.sh/preact@10.19.6/",
 		"tailwindcss": "npm:tailwindcss@3.4.1",
