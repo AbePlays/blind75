@@ -21,7 +21,11 @@ export const handler: Handlers<Problem> = {
 	async GET(_req, ctx) {
 		const post = await getProblem(ctx.params.slug)
 		if (post === null) return ctx.renderNotFound()
-		return ctx.render(post)
+		return ctx.render(post, {
+			headers: {
+				'cache-control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=86400',
+			},
+		})
 	},
 }
 
