@@ -22,7 +22,7 @@ export const handler: Handlers<Data> = {
 		const { searchParams } = new URL(req.url)
 		const selectedGroup = searchParams.getAll('group')
 
-		const response = await fetch('https://nfjx7ug3qec76hujjep5wyjeya0bvovn.lambda-url.ap-south-1.on.aws/')
+		const response = await fetch(Deno.env.get("LAMBDA_URL"))
 		const data = await response.json()
 		const parsedData = parse(ProblemSchema, data)
 
